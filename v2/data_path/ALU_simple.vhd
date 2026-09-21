@@ -23,7 +23,7 @@ ARCHITECTURE behavioral OF ALU IS
    signal    add_res, sub_res, or_res, and_res,res_s:  STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);
    
    --dodato za zadatak 2
-   signal    xor_res :  STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);
+   signal    xor_res, sll_res :  STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);
 
    
 BEGin
@@ -40,6 +40,7 @@ BEGin
 
     --dodato za zadatak 2
     xor_res <= (a_i or b_i)and(not(a_i and b_i));
+    sll_res <= std_logic_vector(shift_left(unsigned(a_i), to_integer(unsigned(b_i(4 downto 0)))));
    
    -- SELECT RESULT
    res_o <= res_s;
@@ -50,7 +51,8 @@ BEGin
                sub_res when sub_op, --sub
                
                --dodato za zadatak 2
-               xor_res when xor_op, --xor
+               xor_res when xor_op, --XOR
+               sll_res when sll_op, --SLL
                
                (others => '1') when others; 
 
