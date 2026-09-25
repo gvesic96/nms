@@ -42,6 +42,8 @@ begin
                   alu_op_o <= xor_op; --dodato za zadatak 2 --XOR
                when "001" =>
                   alu_op_o <= sll_op; --dodato za zadatak 2 --SLL
+               when "101" =>
+                  alu_op_o <= srl_op; --dodato za zadatak 2 --SRL
                when others =>
                   alu_op_o <= and_op;
             end case;
