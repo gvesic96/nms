@@ -10,8 +10,8 @@ package alu_ops_pkg is
    constant add_op    : std_logic_vector (4 downto 0) := "00010";  ---> add a_i and b_i
    constant sub_op    : std_logic_vector (4 downto 0) := "00110";  ---> sub a_i and b_i
    constant eq_op     : std_logic_vector (4 downto 0) := "10111";  --->  set equal
-   constant lts_op    : std_logic_vector (4 downto 0) := "10100";  ---> set less than signed
-   constant ltu_op    : std_logic_vector (4 downto 0) := "10101";  ---> set less than unsigned
+   constant slt_op    : std_logic_vector (4 downto 0) := "10100";  ---> set less than signed
+   constant sltu_op    : std_logic_vector (4 downto 0) := "10101";  ---> set less than unsigned
    constant sll_op    : std_logic_vector (4 downto 0) := "10110";  ---> shift left logic
    constant srl_op    : std_logic_vector (4 downto 0) := "00111";  ---> shift right logic
    constant sra_op    : std_logic_vector (4 downto 0) := "01000";  ---> shift right arithmetic
