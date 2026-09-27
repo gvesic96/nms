@@ -43,6 +43,7 @@ begin
             alu_2bit_op_o <= "10";
             rd_we_o       <= '1';
          when "00100" =>                --I type
+            --mem_to_reg_o  <= '0'; --OVO SE RAZLIKUJE U ODNOSU NA LOAD I STORE
             alu_2bit_op_o <= "11";
             alu_src_o     <= '1';
             rd_we_o       <= '1';

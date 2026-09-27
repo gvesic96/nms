@@ -23,8 +23,9 @@ ARCHITECTURE behavioral OF ALU IS
    signal    add_res, sub_res, or_res, and_res,res_s:  STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);
    
    --dodato za zadatak 2
-   signal    xor_res, sll_res, srl_res :  STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);
-
+   signal    xor_res, sll_res, srl_res, slt_res, sltu_res :  STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);
+   
+   
    
 BEGin
 
@@ -42,6 +43,22 @@ BEGin
     xor_res <= (a_i or b_i)and(not(a_i and b_i));
     sll_res <= std_logic_vector(shift_left(unsigned(a_i), to_integer(unsigned(b_i(4 downto 0)))));
     srl_res <= std_logic_vector(shift_right(unsigned(a_i), to_integer(unsigned(b_i(4 downto 0)))));
+    
+   
+   set_less_than_proc: process(a_i, b_i) is
+   begin
+     if(signed(a_i)<signed(b_i)) then
+         slt_res <= x"00000001";
+       else
+         slt_res <= x"00000000";
+     end if;
+     if(unsigned(a_i)<unsigned(b_i)) then
+         sltu_res <= x"00000001";
+       else
+         sltu_res <= x"00000000";
+     end if;
+   end process set_less_than_proc;
+   
    
    -- SELECT RESULT
    res_o <= res_s;
@@ -54,7 +71,10 @@ BEGin
                --dodato za zadatak 2
                xor_res when xor_op, --XOR
                sll_res when sll_op, --SLL
-               srl_res when srl_op,
+               srl_res when srl_op, --SRL
+               slt_res when slt_op, --SLT
+               sltu_res when sltu_op, --SLTU
+               
                (others => '1') when others; 
 
 

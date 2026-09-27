@@ -29,7 +29,10 @@ begin
             alu_op_o <= add_op;
          when "01" =>
             alu_op_o <= eq_op;
-         when others =>     --"10" and "11"
+         when "11" =>           -- I type instruction
+         --moguce je da bi funkcionalnost I tipa instrukcija mogla da se realizuje u okviru alu_2bit_op_i = "00" kombinacije
+            alu_op_o <= add_op; -- FIXED BUG OF NOT LOADING NEGATIVE IMMEDIATE VALUE PROPERLY?
+         when others =>     -- "10" and "11"  --TREBA SAMO "10" ? za R type instrukcije?
             case funct3_i is
                when "000" =>
                   alu_op_o <= add_op;
@@ -44,6 +47,10 @@ begin
                   alu_op_o <= sll_op; --dodato za zadatak 2 --SLL
                when "101" =>
                   alu_op_o <= srl_op; --dodato za zadatak 2 --SRL
+               when "010" =>
+                  alu_op_o <= slt_op; --dodato za zadatak 2 --SLT (SLT signed)
+               when "011" =>
+                  alu_op_o <= sltu_op; --dodato za zadatak 2 --SLTU (SLT unsigned)
                when others =>
                   alu_op_o <= and_op;
             end case;
