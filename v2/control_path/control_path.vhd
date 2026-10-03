@@ -12,6 +12,7 @@ entity control_path is
          alu_op_o           : out std_logic_vector(4 downto 0);
          pc_next_sel_o      : out  std_logic;         
          alu_src_o          : out std_logic;
+         alu_src_a_o          : out STD_LOGIC;
          rd_we_o            : out std_logic;         
          --********** Ulazni Statusni interfejs **************************************
          branch_condition_i : in  std_logic;
@@ -42,6 +43,7 @@ begin
          mem_to_reg_o  => mem_to_reg_o,
          data_mem_we_o => data_mem_we_s,
          alu_src_o     => alu_src_o,
+         alu_src_a_o   => alu_src_a_o,
          rd_we_o       => rd_we_o,
          alu_2bit_op_o => alu_2bit_op_s);
 

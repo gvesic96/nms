@@ -21,7 +21,7 @@ architecture Behavioral of immediate is
    constant b_type_instruction : std_logic_vector(2 downto 0) := "011";
    --**Otkomentarisati ukoliko je to potrebno prilikom prosirivanja seta instrukcija**
 
-   --constant u_type_instruction : std_logic_vector(2 downto 0):= "100";
+   constant u_type_instruction : std_logic_vector(2 downto 0):= "100";
    --constant j_type_instruction : std_logic_vector(2 downto 0):= "101";
    --constant shamt_instruction  : std_logic_vector(2 downto 0):= "110"; 
    --constant fence_ecall_ebreak : std_logic_vector(2 downto 0):= "111";
@@ -44,6 +44,8 @@ begin
             instruction_type <= s_type_instruction;
          when "11000" =>
             instruction_type <= b_type_instruction;
+         when "00101" =>
+            instruction_type <= u_type_instruction; --dodato za AUIPC
          when others =>
             instruction_type <= r_type_instruction;
       end case;
@@ -60,6 +62,11 @@ begin
                                     instruction_i(30 downto 25) & instruction_i(11 downto 8) & '0';
          when s_type_instruction =>
             immediate_extended_o <= extension(19 downto 0) & instruction_i(31 downto 25) & instruction_i(11 downto 7);
+         
+         --AUIPC
+         when u_type_instruction =>
+            immediate_extended_o <= instruction_i(31 downto 12) & x"000";  --dodato za AUIPC
+         
          when others =>
             immediate_extended_o <= (others => '0');
       end case;

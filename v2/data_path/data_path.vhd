@@ -22,6 +22,7 @@ entity data_path is
       alu_op_i            : in  std_logic_vector(4 downto 0);
       pc_next_sel_i       : in  std_logic;
       alu_src_i           : in  std_logic;
+      alu_src_a_i           : in  STD_LOGIC;
       rd_we_i             : in  std_logic;
       -- ********* Statusni signali *************************
       branch_condition_o  : out std_logic
@@ -81,15 +82,21 @@ begin
       pc_next_s <= pc_adder_s when '0',
       branch_adder_s          when others;
 
-   -- MUX koji odredjuje sledecu vrednost za b ulaz ALU jedinice.
+   -- MUX koji odredjuje sledecu vrednost za 'b' ulaz ALU jedinice.
    b_s <= rs2_data_s when alu_src_i = '0' else
           immediate_extended_s;
+
+    -- MUX koji odredjuje sledecu vrednost za 'a' ulaz ALU jedinice
+   a_s <= rs1_data_s when alu_src_a_i = '0' else
+                pc_reg_s;
+   
    -- Azuriranje a ulaza ALU jedinice
-   a_s <= rs1_data_s;
+   --a_s <= rs1_data_s;
 
    -- MUX koji odredjuje sta se upisuje u odredisni registar(rd_data_s)
    rd_data_s <= data_mem_read_i when mem_to_reg_i = '1' else
                 alu_result_s;
+                
    --*****************************************************
 
    --***********Instanciranja*****************************
