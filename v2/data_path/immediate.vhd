@@ -46,6 +46,8 @@ begin
             instruction_type <= b_type_instruction;
          when "00101" =>
             instruction_type <= u_type_instruction; --dodato za AUIPC
+         when "01101" =>
+            instruction_type <= u_type_instruction; --dodato za LUI
          when others =>
             instruction_type <= r_type_instruction;
       end case;
@@ -63,7 +65,7 @@ begin
          when s_type_instruction =>
             immediate_extended_o <= extension(19 downto 0) & instruction_i(31 downto 25) & instruction_i(11 downto 7);
          
-         --AUIPC
+         --AUIPC, LUI
          when u_type_instruction =>
             immediate_extended_o <= instruction_i(31 downto 12) & x"000";  --dodato za AUIPC
          

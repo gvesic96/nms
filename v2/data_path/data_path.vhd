@@ -22,8 +22,9 @@ entity data_path is
       alu_op_i            : in  std_logic_vector(4 downto 0);
       pc_next_sel_i       : in  std_logic;
       alu_src_i           : in  std_logic;
-      alu_src_a_i           : in  STD_LOGIC;
+      alu_src_a_i         : in  STD_LOGIC;
       rd_we_i             : in  std_logic;
+      lui_sel_i           : in STD_LOGIC;
       -- ********* Statusni signali *************************
       branch_condition_o  : out std_logic
     -- ******************************************************
@@ -40,8 +41,9 @@ architecture Behavioral of data_path is
    signal instruction_s                         : std_logic_vector(31 downto 0);
    signal pc_adder_s                            : std_logic_vector(31 downto 0);
    signal branch_adder_s                        : std_logic_vector(31 downto 0);
-   signal rs1_data_s, rs2_data_s, rd_data_s     : std_logic_vector (31 downto 0);
+   signal rs1_data_s, rs2_data_s, rd_data_s     : std_logic_vector(31 downto 0);
    signal immediate_extended_s, extended_data_s : std_logic_vector(31 downto 0);
+   signal rd_value_s                            : std_logic_vector(31 downto 0);
    -- AlU signali   
    signal alu_zero_s, alu_of_o_s                : std_logic;
    signal b_s, a_s                              : std_logic_vector(31 downto 0);
@@ -93,10 +95,14 @@ begin
    -- Azuriranje a ulaza ALU jedinice
    --a_s <= rs1_data_s;
 
-   -- MUX koji odredjuje sta se upisuje u odredisni registar(rd_data_s)
-   rd_data_s <= data_mem_read_i when mem_to_reg_i = '1' else
+   -- MUX koji odredjuje sta se upisuje u odredisni registar(rd_data_s) - medjuvrednost u slucaju bez LUI
+   rd_value_s <= data_mem_read_i when mem_to_reg_i = '1' else
                 alu_result_s;
                 
+   -- MUX koji odredjuje sta se upisuje u odredisni registar(rd_data_s) - konacna vrednost kada se uzme u obzir i LUI
+   rd_data_s <= immediate_extended_s when lui_sel_i = '1' else
+                rd_value_s;
+    
    --*****************************************************
 
    --***********Instanciranja*****************************
