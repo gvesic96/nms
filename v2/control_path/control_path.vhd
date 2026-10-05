@@ -11,7 +11,7 @@ entity control_path is
          mem_to_reg_o       : out std_logic;
          alu_op_o           : out std_logic_vector(4 downto 0);
          pc_next_sel_o      : out  std_logic;         
-         alu_src_o          : out std_logic;
+         alu_src_b_o          : out std_logic;
          alu_src_a_o        : out STD_LOGIC;
          lui_sel_o          : out STD_LOGIC;
          rd_we_o            : out std_logic;         
@@ -43,7 +43,7 @@ begin
          branch_o      => branch_s,
          mem_to_reg_o  => mem_to_reg_o,
          data_mem_we_o => data_mem_we_s,
-         alu_src_o     => alu_src_o,
+         alu_src_b_o     => alu_src_b_o,
          alu_src_a_o   => alu_src_a_o,
          lui_sel_o     => lui_sel_o,
          rd_we_o       => rd_we_o,

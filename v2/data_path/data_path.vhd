@@ -21,7 +21,7 @@ entity data_path is
       mem_to_reg_i        : in  std_logic;
       alu_op_i            : in  std_logic_vector(4 downto 0);
       pc_next_sel_i       : in  std_logic;
-      alu_src_i           : in  std_logic;
+      alu_src_b_i           : in  std_logic;
       alu_src_a_i         : in  STD_LOGIC;
       rd_we_i             : in  std_logic;
       lui_sel_i           : in STD_LOGIC;
@@ -85,7 +85,7 @@ begin
       branch_adder_s          when others;
 
    -- MUX koji odredjuje sledecu vrednost za 'b' ulaz ALU jedinice.
-   b_s <= rs2_data_s when alu_src_i = '0' else
+   b_s <= rs2_data_s when alu_src_b_i = '0' else
           immediate_extended_s;
 
     -- MUX koji odredjuje sledecu vrednost za 'a' ulaz ALU jedinice

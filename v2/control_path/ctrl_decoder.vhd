@@ -10,7 +10,7 @@ entity ctrl_decoder is
       branch_o      : out std_logic;
       mem_to_reg_o  : out std_logic;
       data_mem_we_o : out std_logic;
-      alu_src_o     : out std_logic;
+      alu_src_b_o     : out std_logic;
       alu_src_a_o   : out STD_LOGIC;
       lui_sel_o     : out STD_LOGIC;
       rd_we_o       : out std_logic;
@@ -27,7 +27,7 @@ begin
       branch_o      <= '0';
       mem_to_reg_o  <= '0';
       data_mem_we_o <= '0';
-      alu_src_o     <= '0';
+      alu_src_b_o     <= '0';
       alu_src_a_o   <= '0';
       lui_sel_o     <= '0';
       rd_we_o       <= '0';
@@ -37,19 +37,19 @@ begin
          when "00000" =>                --LOAD, 5v ~ funct3
             alu_2bit_op_o <= "00";
             mem_to_reg_o  <= '1';
-            alu_src_o     <= '1';
+            alu_src_b_o     <= '1';
             rd_we_o       <= '1';
          when "01000" =>                --STORE, 3v ~ funct3
             alu_2bit_op_o <= "00";
             data_mem_we_o <= '1';
-            alu_src_o     <= '1';
+            alu_src_b_o     <= '1';
          when "01100" =>                --R type, 
             alu_2bit_op_o <= "10";
             rd_we_o       <= '1';
          when "00100" =>                --I type
             --mem_to_reg_o  <= '0'; --OVO SE RAZLIKUJE U ODNOSU NA LOAD I STORE
             alu_2bit_op_o <= "11";
-            alu_src_o     <= '1';
+            alu_src_b_o     <= '1';
             rd_we_o       <= '1';
          when "11000" =>                --B type BEQ
             alu_2bit_op_o <= "01";
@@ -58,7 +58,7 @@ begin
          when "00101" =>                --U type AUIPC
             alu_2bit_op_o <= "00";
             alu_src_a_o <= '1';
-            alu_src_o <= '1';
+            alu_src_b_o <= '1';
             rd_we_o <= '1';
          when "01101" =>                --U type LUI
             alu_2bit_op_o <= "00";
