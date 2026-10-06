@@ -27,11 +27,28 @@ begin
       case alu_2bit_op_i is
          when "00" =>
             alu_op_o <= add_op;
+            
          when "01" =>
             alu_op_o <= eq_op;
          when "11" =>           -- I type instruction
          --moguce je da bi funkcionalnost I tipa instrukcija mogla da se realizuje u okviru alu_2bit_op_i = "00" kombinacije
-            alu_op_o <= add_op; -- FIXED BUG OF NOT LOADING NEGATIVE IMMEDIATE VALUE PROPERLY?
+            --alu_op_o <= add_op; -- FIXED BUG OF NOT LOADING NEGATIVE IMMEDIATE VALUE PROPERLY?
+            case funct3_i is
+              when "000" =>             --addi
+                alu_op_o <= add_op;
+              when "010" =>             --slti
+                alu_op_o <= slt_op;
+              when "011" =>             --sltiu
+                alu_op_o <= sltu_op;
+              when "100" =>             --xori
+                alu_op_o <= xor_op;
+              when "110" =>             --ori
+                alu_op_o <= or_op;
+              when "111" =>             --andi
+                alu_op_o <= and_op;
+              when others =>
+                alu_op_o <= add_op;
+            end case;
          when others =>     -- "10" and "11"  --TREBA SAMO "10" ? za R type instrukcije?
             case funct3_i is
                when "000" =>
