@@ -63,7 +63,11 @@ begin
                when "001" =>
                   alu_op_o <= sll_op; --dodato za zadatak 2 --SLL
                when "101" =>
-                  alu_op_o <= srl_op; --dodato za zadatak 2 --SRL
+                  if(funct7_i(5)='1') then
+                     alu_op_o <= sra_op;
+                  else
+                     alu_op_o <= srl_op; --dodato za zadatak 2 --SRL
+                  end if;
                when "010" =>
                   alu_op_o <= slt_op; --dodato za zadatak 2 --SLT (SLT signed)
                when "011" =>

@@ -24,7 +24,7 @@ ARCHITECTURE behavioral OF ALU IS
    
    --dodato za zadatak 2
    signal    xor_res, sll_res, srl_res, slt_res, sltu_res :  STD_LOGIC_VECTOR(WIDTH-1 DOWNTO 0);
-   
+   signal    sra_res : STD_LOGIC_VECTOR(WIDTH-1 downto 0);
    
    
 BEGin
@@ -43,7 +43,7 @@ BEGin
     xor_res <= (a_i or b_i)and(not(a_i and b_i));
     sll_res <= std_logic_vector(shift_left(unsigned(a_i), to_integer(unsigned(b_i(4 downto 0)))));
     srl_res <= std_logic_vector(shift_right(unsigned(a_i), to_integer(unsigned(b_i(4 downto 0)))));
-    
+    sra_res <= std_logic_vector(shift_right(signed(a_i), to_integer(unsigned(b_i(4 downto 0)))));
    
    set_less_than_proc: process(a_i, b_i) is
    begin
@@ -59,7 +59,6 @@ BEGin
      end if;
    end process set_less_than_proc;
    
-   
    -- SELECT RESULT
    res_o <= res_s;
    with op_i select
@@ -74,6 +73,7 @@ BEGin
                srl_res when srl_op, --SRL
                slt_res when slt_op, --SLT
                sltu_res when sltu_op, --SLTU
+               sra_res when sra_op,   --SRA
                
                (others => '1') when others; 
 
