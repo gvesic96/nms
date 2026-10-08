@@ -12,7 +12,7 @@ end entity;
 architecture Behavioral of immediate is
    signal opcode           : std_logic_vector(6 downto 0);
    signal instruction_type : std_logic_vector(2 downto 0);
-   --signal funct3           : std_logic_vector(2 downto 0);
+   signal funct3           : std_logic_vector(2 downto 0);
    signal extension        : std_logic_vector(19 downto 0);
 
    constant r_type_instruction : std_logic_vector(2 downto 0) := "000";
@@ -23,14 +23,14 @@ architecture Behavioral of immediate is
 
    constant u_type_instruction : std_logic_vector(2 downto 0):= "100";
    --constant j_type_instruction : std_logic_vector(2 downto 0):= "101";
-   --constant shamt_instruction  : std_logic_vector(2 downto 0):= "110"; 
+   constant shamt_instruction  : std_logic_vector(2 downto 0):= "110"; 
    --constant fence_ecall_ebreak : std_logic_vector(2 downto 0):= "111";
 
 begin
 
    opcode    <= instruction_i(6 downto 0);
    extension <= (others => instruction_i(31));
-   --funct3    <= instruction_i(14 downto 12);
+   funct3    <= instruction_i(14 downto 12);
 
    -- u odnosu na opcode pronadji instrukciju
    process (opcode) is
@@ -39,7 +39,11 @@ begin
          when "01100" =>
             instruction_type <= r_type_instruction;
          when "00100" =>
-            instruction_type <= i_type_instruction;
+            if(funct3="101" or funct3="001") then
+                instruction_type <= shamt_instruction;  --SLLI, SRLI, SRAI
+            else
+                instruction_type <= i_type_instruction; --ADDI, SLTI, SLTIU, XORI, ORI, ANDI
+            end if;
          when "01000" =>
             instruction_type <= s_type_instruction;
          when "11000" =>
@@ -68,6 +72,10 @@ begin
          --AUIPC, LUI
          when u_type_instruction =>
             immediate_extended_o <= instruction_i(31 downto 12) & x"000";  --dodato za AUIPC
+         
+         --SLLI, SRLI, SRAI
+         when shamt_instruction =>
+            immediate_extended_o <= "000" & x"000000" & instruction_i(24 downto 20);
          
          when others =>
             immediate_extended_o <= (others => '0');

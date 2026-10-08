@@ -36,12 +36,20 @@ begin
             case funct3_i is
               when "000" =>             --addi
                 alu_op_o <= add_op;
+              when "001" =>             --slli
+                alu_op_o <= sll_op;     
               when "010" =>             --slti
                 alu_op_o <= slt_op;
               when "011" =>             --sltiu
                 alu_op_o <= sltu_op;
               when "100" =>             --xori
                 alu_op_o <= xor_op;
+              when "101" =>             --srli,srai
+                if(funct7_i(5)='1') then
+                  alu_op_o <= sra_op; --srai
+                else
+                  alu_op_o <= srl_op; --srli
+                end if;
               when "110" =>             --ori
                 alu_op_o <= or_op;
               when "111" =>             --andi
