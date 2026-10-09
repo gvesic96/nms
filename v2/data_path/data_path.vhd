@@ -39,6 +39,7 @@ architecture Behavioral of data_path is
    --********************************************************
    --**************SIGNALI***********************************
    signal instruction_s                         : std_logic_vector(31 downto 0);
+   signal funct3_s                              : STD_LOGIC_VECTOR(2 downto 0);
    signal pc_adder_s                            : std_logic_vector(31 downto 0);
    signal branch_adder_s                        : std_logic_vector(31 downto 0);
    signal rs1_data_s, rs2_data_s, rd_data_s     : std_logic_vector(31 downto 0);
@@ -68,15 +69,48 @@ begin
 
    --***********Kombinaciona logika***********************
    bcc <= instruction_s(12);
+   funct3_s <= instruction_s(14 downto 12);
 
    -- sabirac za uvecavanje programskog brojaca (sledeca instrukcija)
    pc_adder_s     <= std_logic_vector(unsigned(pc_reg_s) + to_unsigned(4, DATA_WIDTH));
    -- sabirac za uslovne skokove
    branch_adder_s <= std_logic_vector(unsigned(immediate_extended_s) + unsigned(pc_reg_s));
 
-   -- Provera uslova skoka
-   branch_condition_o <= '1' when a_s = b_s else
-                         '0';
+   -- Provera uslova skoka --komparator
+   --branch_condition_o <= '1' when a_s = b_s else
+   --                      '0';
+   comparator_block: process(funct3_s, a_s, b_s) is
+     begin
+        branch_condition_o <= '0';
+        case(funct3_s) is
+           when "000" =>  --BEQ
+              if(a_s = b_s) then
+                 branch_condition_o <= '1';
+              end if;
+           when "001" =>  --BNE
+              if(not(a_s = b_s)) then
+                 branch_condition_o <= '1';
+              end if;
+           when "100" =>  --BLT
+              if(signed(a_s) < signed(b_s)) then
+                 branch_condition_o <= '1';
+              end if;
+           when "101" =>  --BGE
+              if((signed(a_s) > signed(b_s)) or (signed(a_s) = signed(b_s))) then
+                 branch_condition_o <= '1';
+              end if;
+           when "110" =>  --BLTU
+              if(unsigned(a_s) < unsigned(b_s)) then
+                 branch_condition_o <= '1';
+              end if;
+           when "111" =>  --BGEU
+              if((unsigned(a_s) > unsigned(b_s)) or (unsigned(a_s) = unsigned(b_s))) then
+                 branch_condition_o <= '1';
+              end if;
+           when others =>
+              branch_condition_o <= '0';
+        end case;
+     end process;
 
    -- MUX koji odredjuje sledecu vrednost za programski brojac.
    -- Ako se ne desi skok programski brojac se uvecava za 4.
